@@ -1,0 +1,20 @@
+.container {
+    height :100dvh;
+    justify-content: space-between;
+    max-width: 400px;
+    min-width: 300px;
+    position: fixed;
+    top : 0;
+    bottom : 0;
+    padding: 1rem;
+    background-color: var(--mui-bg-paper)
+}
+.logo_bar{
+    padding:1rem;
+    background-color:var(--mui-primary-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    color: var(--mui-primary-contrast);
+}

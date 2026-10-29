@@ -1,6 +1,6 @@
 import { User } from "@/type/user.type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loginUserAsync, logoutMeAsync, registerUserAsync } from "./handle-auth/auth.action";
+import { googleAuthAsync, loginUserAsync, logoutMeAsync, registerUserAsync } from "./handle-auth/auth.action";
 
 type InitialState = {
   user: User | null;
@@ -16,7 +16,6 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loginUserAsync.fulfilled, (state, action:PayloadAction<User>) => {
-      console.log("login called")
       state.user = action.payload
     })
     .addCase(registerUserAsync.fulfilled, (state, action : PayloadAction<User>) => {
@@ -25,6 +24,12 @@ const authSlice = createSlice({
     .addCase(logoutMeAsync.fulfilled, (state) => {
       state.user = null
     }) 
+    .addCase(googleAuthAsync.fulfilled, (state, action) => {
+      state.user = action.payload
+    }) 
+
+
+
   }
 });
 
