@@ -1,15 +1,19 @@
-import Navbar from "@/components/navbar/navbar";
+
+import Sidebar from "@/components/sidebar/side-bar";
+import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div>
         <aside>
-            <Navbar />
+            <Sidebar />
         </aside>
-        <div style={{marginLeft: '300px'}}>
+        <Box sx={{marginLeft: {
+          md: '240px'
+        }}}>
             {children}
-        </div>
+        </Box>
     </div>
   )
 }

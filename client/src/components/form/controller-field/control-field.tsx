@@ -1,17 +1,17 @@
 import { TextField } from "@mui/material";
 import {
-  Controller,
   type FieldPath,
   type FieldValues,
   type RegisterOptions,
   type Control,
+  Controller,
 } from "react-hook-form";
 
 type ControlFieldProp<T extends FieldValues> = {
   name: FieldPath<T>;
   type?: "text" | "email" | "password" | "number" ;
   multiline?: boolean;
-  label: string;
+  label?: string;
   placeholder?: string;
   rules?: RegisterOptions<T, FieldPath<T>>;
   control: Control<T>;

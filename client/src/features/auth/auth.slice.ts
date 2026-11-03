@@ -1,6 +1,7 @@
 import { User } from "@/type/user.type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { googleAuthAsync, loginUserAsync, logoutMeAsync, registerUserAsync } from "./handle-auth/auth.action";
+import { changeAvatarAsync } from "./handle-user/users.action";
 
 type InitialState = {
   user: User | null;
@@ -27,6 +28,10 @@ const authSlice = createSlice({
     .addCase(googleAuthAsync.fulfilled, (state, action) => {
       state.user = action.payload
     }) 
+    .addCase(changeAvatarAsync.fulfilled, (state, action) => {
+      if(!state.user) return;
+      state.user.avatar = action.payload.data.avatar
+    })
 
 
 

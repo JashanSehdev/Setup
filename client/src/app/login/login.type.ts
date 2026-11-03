@@ -1,9 +1,5 @@
 import z from "zod";
-import {
-  UseFormRegister,
-  FieldPath,
-  FieldErrors,
-} from "react-hook-form";
+
 
 export const loginSchema = z.object({
   identifier: z.string().min(1, "username or Email required"),
@@ -12,11 +8,3 @@ export const loginSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginSchema>;
 
-export type InputFields = {
-//   register: UseFormRegister<LoginInput>;
-  name: FieldPath<LoginInput>;
-  label: string;
-  type : 'text' | 'number' | 'password' | 'email',
-//   error: FieldErrors<LoginInput>;
-  placeholder: string;
-};

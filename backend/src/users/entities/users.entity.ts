@@ -17,26 +17,14 @@ export class User {
     @Column({type: 'varchar', length : 120, nullable : true})
     password : string
 
-    @Column({type : 'enum', enum : Role, default : Role.UNDEFINED})
+    @Column({type : 'enum', enum : Role, default : Role.USER})
     role : Role
 
     @Column({type : 'varchar', length: 255, unique:true, nullable: true})
     googleId : string
 
-    // @Column({type :'varchar', length : 255, unique: true, nullable: true})
-    // githubId : string
-
-    // @Column({type : 'varchar', length: 512, nullable : true})
-    // avatarUrl : string
-
-    // @Column({type : 'varchar', length: 255})
-    // refreshToken : string
-
-    // @Column({type : 'varchar', length: 255})
-    // passwordResetToken : string
-
-    // @Column({type : 'timestamp', nullable: true})
-    // passwordResetTokenExpiresAt : Date | null
+    @Column({type : 'varchar', length:500, nullable : true})
+    avatar : string
 
     @CreateDateColumn()
     createdAt : Date

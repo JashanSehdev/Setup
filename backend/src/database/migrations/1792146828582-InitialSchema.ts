@@ -38,10 +38,17 @@ export class InitialSchema1792146828582 implements MigrationInterface {
                     {
                         name : 'role',
                         type : 'enum',
-                        enum : ['admin', 'employee', 'undefined', 'manager'],
+                        enum : ['admin', 'user'],
                         enumName : 'user_role_enum',
-                        default: "'undefined'"
+                        default: "'user'"
                     },
+
+                    {
+                        name : 'avatar',
+                        type : 'varchar',
+                        isNullable : true,
+                    },
+
                     {
                         name : 'googleId',
                         type : 'varchar',

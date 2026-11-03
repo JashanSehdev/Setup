@@ -7,19 +7,20 @@ import {
 } from "react-hook-form";
 import { CldUploadWidget } from "next-cloudinary";
 import { Box, FormHelperText } from "@mui/material";
-import Image from "next/image";
 import { ReactNode } from "react";
 
 type CloudinaryUploadControllerProps<T extends FieldValues> = {
   control: Control<T>;
   name: FieldPath<T>;
-  children : ReactNode
+  children : ReactNode;
+  onUploadComplete?: (url: string) => void;
 };
 
 export default function CloudinaryUploadController<T extends FieldValues>({
   name,
   control,
-  children
+  children,
+  onUploadComplete
 }: CloudinaryUploadControllerProps<T>) {
   return (
     <Controller
@@ -36,6 +37,7 @@ export default function CloudinaryUploadController<T extends FieldValues>({
                 "secure_url" in result.info
               ) {
                 field.onChange(result.info.secure_url);
+                 onUploadComplete?.(result.info.secure_url);
               }
             }}
           >
@@ -45,14 +47,6 @@ export default function CloudinaryUploadController<T extends FieldValues>({
               </Box>
             )}
           </CldUploadWidget>
-          {typeof field.value === "string" && field.value && (
-            <Image
-              src={field.value}
-              alt="Uploaded preview"
-              width={120}
-              style={{ display: "block", marginTop: 12 }}
-            />
-          )}
 
           {error && <FormHelperText error>{error.message}</FormHelperText>}
         </div>

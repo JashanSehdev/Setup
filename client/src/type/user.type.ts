@@ -6,4 +6,5 @@ export type User = {
     role : string
     createAt : string;
     updatedAt : string;  
+    avatar : string | null
 }

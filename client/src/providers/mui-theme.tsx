@@ -3,12 +3,12 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   "palette": {
     "primary": {
-      "main": "#2652cf",
-      "contrastText": "#f2f5fc"
+      "main": "#308265",
+      "contrastText": "#f3f5fd"
     },
     "secondary": {
-      "main": "#6363c6",
-      "contrastText": "#f3f4fc"
+      "main": "#977ae0",
+      "contrastText": "#f5f4fb"
     },
     "success": {
       "main": "#009843",
@@ -27,19 +27,19 @@ const theme = createTheme({
       "contrastText": "#eaf7ff"
     },
     "background": {
-      "default": "#FEF3E2",
-      "paper": "#f1f2f4"
+      "default": "#f9fafc",
+      "paper": "#FFFFFF"
     },
     "text": {
-      "primary": "#0e141f",
+      "primary": "#0a0f1a",
       "secondary": "#545861"
     },
-    "divider": "#dfe1e6",
+    "divider": "#e0e3e8",
     "mode": "light"
   },
   "spacing": 8,
   "shape": {
-    "borderRadius": 4
+    "borderRadius": 8
   }
 });
 

@@ -1,7 +1,5 @@
 
 export enum Role {
-    UNDEFINED = 'undefined',
-    EMPLOYEE = 'employee',
-    MANAGER = 'manager',
+    USER = 'user',
     ADMIN = 'admin'
 }
