@@ -79,6 +79,9 @@ export class UsersService {
         username: true,
         email: true,
         role: true,
+        avatar: true,
+        status: true,
+        createdAt: true
       },
       order,
       skip: (page - 1) * limit,

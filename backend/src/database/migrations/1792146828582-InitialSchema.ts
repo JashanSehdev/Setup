@@ -42,6 +42,12 @@ export class InitialSchema1792146828582 implements MigrationInterface {
                         enumName : 'user_role_enum',
                         default: "'user'"
                     },
+                    {
+                        name : 'status',
+                        type : 'enum',
+                        enum : ['active', 'blocked'],
+                        default: "'active'"
+                    },
 
                     {
                         name : 'avatar',

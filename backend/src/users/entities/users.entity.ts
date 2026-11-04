@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../enum/roles.enum.js";
+import { Status } from "../enum/status.enum.js";
 
 @Entity('users')
 
@@ -25,6 +26,9 @@ export class User {
 
     @Column({type : 'varchar', length:500, nullable : true})
     avatar : string
+
+    @Column({type : 'enum', enum: Status, default: Status.ACTIVE})
+    status : Status
 
     @CreateDateColumn()
     createdAt : Date

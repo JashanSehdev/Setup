@@ -10,22 +10,28 @@ import {
   Paper,
   Chip,
   Box,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  Pagination,
 } from "@mui/material";
 import styles from "./user-table.module.css";
-
-import { users } from "@/data/users.data";
 import UserToolbar from "../user-toolbar/user-toolbar";
+import useUsers from "@/hooks/admin/useUsers";
 
 export default function UserTable() {
+  const {users, totalPages, page, setPage, handleFiltersChange} = useUsers()
   return (
     <Box className={styles.container}>
-      <UserToolbar />
+      <UserToolbar handleFiltersChange={handleFiltersChange} />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell>Email</TableCell>
+              <TableCell>id</TableCell>
+              <TableCell align="center">User</TableCell>
+
               <TableCell>Role</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Created At</TableCell>
@@ -35,9 +41,20 @@ export default function UserTable() {
           <TableBody>
             {users.map((user) => (
               <TableRow key={user.id} hover>
-                <TableCell>{user.username}</TableCell>
-
-                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  {user.id}
+                </TableCell>
+                <TableCell>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar src={user.avatar} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={user.username}
+                      secondary={user.email}
+                    />
+                  </ListItem>
+                </TableCell>
 
                 <TableCell>
                   <Chip label={user.role} size="small" variant="outlined" />
@@ -51,11 +68,12 @@ export default function UserTable() {
                   />
                 </TableCell>
 
-                <TableCell>{user.createdAt}</TableCell>
+                <TableCell>{user.createdAt.slice(0,10)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+          <Pagination defaultPage={page ?? 1} onChange={(_, page)=> (setPage(page))} color="primary" count={totalPages}/> 
       </TableContainer>
     </Box>
   );

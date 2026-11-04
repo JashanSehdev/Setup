@@ -1,6 +1,8 @@
 import { api, getErrorMessage } from "@/api/api";
 import { FilterInput } from "@/components/admin/users/user-toolbar/user-toolbar.type";
 import { RootState } from "@/features/store";
+import { PaginationRequest, PaginationResponse } from "@/type/meta.type";
+import { AdminUser } from "@/type/user.type";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 
@@ -23,7 +25,7 @@ export const changeAvatarAsync = createAsyncThunk <{data : data}, data, {state: 
 )
 
 //admin Thunk
-export const fetchUsersAsync = createAsyncThunk <{data : data}, FilterInput | void>(
+export const fetchUsersAsync = createAsyncThunk <PaginationResponse<AdminUser>, FilterInput & PaginationRequest | void>(
     'user/changeAvatar',
     async(filters, thunkApi) => {
         try {

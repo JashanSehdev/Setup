@@ -9,6 +9,10 @@ import {
   TableRow,
   Paper,
   Chip,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
 } from "@mui/material";
 
 import { users } from "@/data/users.data";
@@ -19,8 +23,7 @@ export default function EntityTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Username</TableCell>
-            <TableCell>Email</TableCell>
+            <TableCell>user</TableCell>
             <TableCell>Role</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Created At</TableCell>
@@ -30,9 +33,15 @@ export default function EntityTable() {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id} hover>
-              <TableCell>{user.username}</TableCell>
-
-              <TableCell>{user.email}</TableCell>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar src={user.avatar} />
+                </ListItemAvatar>
+                <ListItemText 
+                  primary={user.username}
+                  secondary={user.email}
+                />
+              </ListItem>
 
               <TableCell>
                 <Chip

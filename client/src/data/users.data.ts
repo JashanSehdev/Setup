@@ -7,6 +7,7 @@ export const users: AdminUser[] = [
     email: "john@example.com",
     role: "USER",
     status: "ACTIVE",
+    avatar: "https://i.pravatar.cc/150?img=12",
     createdAt: "2026-11-02",
   },
   {
@@ -15,6 +16,7 @@ export const users: AdminUser[] = [
     email: "sarah@example.com",
     role: "ADMIN",
     status: "ACTIVE",
+    avatar: "https://i.pravatar.cc/150?img=47",
     createdAt: "2026-11-01",
   },
   {
@@ -23,6 +25,7 @@ export const users: AdminUser[] = [
     email: "mike@example.com",
     role: "USER",
     status: "BLOCKED",
+    avatar: "https://i.pravatar.cc/150?img=11",
     createdAt: "2026-10-28",
   },
 ];
