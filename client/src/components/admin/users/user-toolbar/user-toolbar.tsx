@@ -7,7 +7,7 @@ import { FilterInput } from "./user-toolbar.type";
 export default function UserToolbar({
   handleFiltersChange,
 }: {
-  handleFiltersChange: (FilterInput) => void;
+  handleFiltersChange: (data : FilterInput) => void;
 }) {
   const { control, handleSubmit, register, reset } = useForm<FilterInput>();
 

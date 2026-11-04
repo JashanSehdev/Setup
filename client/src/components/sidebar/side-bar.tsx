@@ -87,7 +87,16 @@ export default function Sidebar() {
                   src={user.avatar ?? ""}
                 />
               </ListItemAvatar>
-              <ListItemText primary={user.username} secondary={user.email} />
+              <ListItemText
+                primary={user.username}
+                secondary={user.email}
+                slotProps={{
+                  secondary: {
+                    noWrap: true,
+                    sx: { width: "100%" },
+                  },
+                }}
+              />
             </ListItem>
 
             <Button variant="contained" >
