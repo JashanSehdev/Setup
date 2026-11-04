@@ -15,13 +15,19 @@ import {
   Avatar,
   ListItemText,
   Pagination,
+  IconButton,
 } from "@mui/material";
 import styles from "./user-table.module.css";
 import UserToolbar from "../user-toolbar/user-toolbar";
 import useUsers from "@/hooks/admin/useUsers";
+import BlockIcon from '@mui/icons-material/Block';
+import EditIcon from '@mui/icons-material/Edit';
+import { useState } from "react";
+import BlockAlert from "../alerts/block-alert/block-alert";
 
 export default function UserTable() {
   const {users, totalPages, page, setPage, handleFiltersChange} = useUsers()
+  const [blockAlert, setBlockAlert] = useState<boolean>(false)
   return (
     <Box className={styles.container}>
       <UserToolbar handleFiltersChange={handleFiltersChange} />
@@ -35,6 +41,7 @@ export default function UserTable() {
               <TableCell>Role</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Created At</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -69,12 +76,25 @@ export default function UserTable() {
                 </TableCell>
 
                 <TableCell>{user.createdAt.slice(0,10)}</TableCell>
+                <TableCell align="center">
+                  <IconButton>
+                    <EditIcon/>
+                  </IconButton>
+                  <IconButton>
+                    <BlockIcon/>
+                  </IconButton>
+                </TableCell>
+                <BlockAlert username={user.username} id={user.id}/>
               </TableRow>
+              
             ))}
           </TableBody>
         </Table>
           <Pagination defaultPage={page ?? 1} onChange={(_, page)=> (setPage(page))} color="primary" count={totalPages}/> 
       </TableContainer>
+      
+
+      
     </Box>
   );
 }
