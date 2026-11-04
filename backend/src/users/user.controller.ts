@@ -3,6 +3,7 @@ import { Request } from "express";
 import { UsersService } from "./user.service.js";
 import { FindUserDto } from "./dto/find-user-dto.js";
 import { ChangeAvatarDto } from "./dto/change-avatar.dto.js";
+import { FilterUserDto } from "./dto/filter-user-dto.js";
 
 @Controller('users')
 export class UserControllers {
@@ -12,7 +13,7 @@ export class UserControllers {
     ){}
 
     @Get()
-    getUsers(@Req() req : Request & {user : any}, @Query() query : FindUserDto) {
+    getUsers(@Req() req : Request & {user : any}, @Query() query : FilterUserDto) {
         return this.userService.findUsers(req.user.id, query )
     }
 

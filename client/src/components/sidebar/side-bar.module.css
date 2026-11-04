@@ -1,4 +1,11 @@
 
 .container {
-    background-color: var(--mui-secondary-light) !important;
+   display: flex;
+   flex-direction: column;
+    height: 100%;
+    padding-bottom: 1rem;
+}
+
+.loginButton {
+    cursor: pointer;
 }

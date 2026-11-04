@@ -1,8 +1,7 @@
-import { Divider, Grid, Paper, Stack, ThemeProvider, Typography } from "@mui/material";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
 import LoginForm from "./login-form/login-form";
 import styles from "./login-card.module.css";
 import GoogleAuthButton from "../google-auth-button/google-auth";
-import theme from "@/providers/mui-theme";
 
 export default function LoginCard() {
   return (

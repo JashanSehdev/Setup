@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Box, FormLabel, TextField } from "@mui/material";
 import {
   type FieldPath,
   type FieldValues,
@@ -9,7 +9,7 @@ import {
 
 type ControlFieldProp<T extends FieldValues> = {
   name: FieldPath<T>;
-  type?: "text" | "email" | "password" | "number" ;
+  type?: "text" | "email" | "password" | "number";
   multiline?: boolean;
   label?: string;
   placeholder?: string;
@@ -20,7 +20,7 @@ type ControlFieldProp<T extends FieldValues> = {
 
 export default function ControlField<T extends FieldValues>({
   name,
-  type ='text',
+  type = "text",
   label,
   placeholder,
   control,
@@ -29,24 +29,26 @@ export default function ControlField<T extends FieldValues>({
   rows,
 }: ControlFieldProp<T>) {
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field, fieldState : {error} }) => (
-        <TextField
-          {...field}
-          label={label}
-          placeholder={placeholder}
-          type={type}
-          multiline={multiline}
-          rows={multiline ? rows : undefined}
-          fullWidth
-          error={!!error}
-          helperText = {error?.message}
-          value={field.value ?? ""}
-        />
-      )}
-    />
+    <Box>
+      <FormLabel sx={{mb:'1'}}>{label}</FormLabel>
+      <Controller
+        name={name}
+        control={control}
+        rules={rules}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            placeholder={placeholder}
+            type={type}
+            multiline={multiline}
+            rows={multiline ? rows : undefined}
+            fullWidth
+            error={!!error}
+            helperText={error?.message}
+            value={field.value ?? ""}
+          />
+        )}
+      />
+    </Box>
   );
 }

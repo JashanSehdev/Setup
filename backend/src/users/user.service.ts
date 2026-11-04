@@ -7,7 +7,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/users.entity.js';
-import { FindOptionsWhere, ILike, Not, Repository } from 'typeorm';
+import {
+  FindOptionsOrder,
+  FindOptionsWhere,
+  ILike,
+  Not,
+  Repository,
+} from 'typeorm';
 import { OmitType } from '@nestjs/mapped-types';
 import { UpdateUserDto } from '../users/dto/update-user-dto.js';
 import { rmSync } from 'fs';
@@ -15,6 +21,9 @@ import { GoogleAuthDto } from '../auth/dto/google.dto.js';
 import { CreateUserInput, UserResponse } from './interfaces/user.interface.js';
 import { FindUserDto } from './dto/find-user-dto.js';
 import { paginationResponse } from '../common/utlis/pagination.js';
+import { FilterUserDto } from './dto/filter-user-dto.js';
+import { ORDER, SORT } from '../common/enum/filter.enum.js';
+import { Role } from './enum/roles.enum.js';
 
 Injectable();
 export class UsersService {
@@ -28,16 +37,39 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async findUsers(userId: number, query: FindUserDto) {
+  async findUsers(userId: number, query: FilterUserDto) {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
     const where: FindOptionsWhere<User> = {};
+    const order: FindOptionsOrder<User> = {};
 
     where.id = Not(userId);
 
+    if (query.sortBy) {
+      if (query.sortBy === SORT.NAME) {
+        order.username = 'ASC';
+      }
+    } else if (query.sortBy) {
+      if (query.sortBy === SORT.CREATEDAT) {
+        order.createdAt = 'ASC';
+      }
+    } else if (query.sortBy) {
+      if (query.sortBy === SORT.UPDATEDAT) {
+        order.updatedAt =  'ASC';
+      }
+    }
+
+    if (query.orderBy) {
+      order.createdAt = query.orderBy
+    }
+
     if (query.search) {
       where.username = ILike(`%${query.search}%`);
+    }
+
+    if (query.role) {
+      where.role = query.role
     }
 
     const [data, total] = await this.userRepository.findAndCount({
@@ -48,6 +80,7 @@ export class UsersService {
         email: true,
         role: true,
       },
+      order,
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -71,7 +104,7 @@ export class UsersService {
         email: true,
         createdAt: true,
         role: true,
-        avatar: true
+        avatar: true,
       },
     });
   }
@@ -127,18 +160,19 @@ export class UsersService {
     return this.userRepository.remove(user);
   }
 
-  async changeAvatar (userId : number, avatar : string) {
+  async changeAvatar(userId: number, avatar: string) {
     const user = this.findOne(userId);
 
-    if (!user) throw new NotFoundException('User not found')
+    if (!user) throw new NotFoundException('User not found');
 
-    const update = await this.userRepository.update(userId, {avatar});
+    const update = await this.userRepository.update(userId, { avatar });
 
-    if ( update.affected !== 1) throw new InternalServerErrorException('Failed to update User Avatar');
+    if (update.affected !== 1)
+      throw new InternalServerErrorException('Failed to update User Avatar');
 
     return {
       success: true,
-      data : { avatar}
-    }
+      data: { avatar },
+    };
   }
 }
