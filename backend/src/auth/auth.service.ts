@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -12,6 +13,7 @@ import { LoginUserDto } from './dto/login.dto.js';
 import { GoogleAuthDto } from './dto/google.dto.js';
 import { UserResponse } from '../users/interfaces/user.interface.js';
 import { User } from '../users/entities/users.entity.js';
+import { Status } from '../users/enum/status.enum.js';
 
 @Injectable()
 export class AuthService {
@@ -70,6 +72,9 @@ export class AuthService {
       });
     }
 
+    if(user.status === Status.BLOCK) {
+      throw new BadRequestException('You are Blocked By admin')
+    }
     const isAuthenticated = await bcrypt.compare(
       loginUserDto.password,
       user.password,

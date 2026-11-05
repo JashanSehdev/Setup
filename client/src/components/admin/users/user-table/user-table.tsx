@@ -24,10 +24,32 @@ import BlockIcon from '@mui/icons-material/Block';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from "react";
 import BlockAlert from "../alerts/block-alert/block-alert";
+import AlertBox from "../../alert/alertBox";
+import { BlockUser } from "./user-table";
+
+
 
 export default function UserTable() {
-  const {users, totalPages, page, setPage, handleFiltersChange} = useUsers()
-  const [blockAlert, setBlockAlert] = useState<boolean>(false)
+  const {users, totalPages, page, setPage, handleFiltersChange, changeAccess} = useUsers()
+  const [blockedUser, setBlockedUser] = useState<BlockUser | null>();
+
+  const handleOpen = (id : number, username: string, status : 'active' | 'blocked') => {
+    setBlockedUser({username, status, id})
+  }
+
+  const handleClose = () => {
+    setBlockedUser(null)
+  }
+
+  const HandleAccess = () => {
+    if(!blockedUser) return
+    if (blockedUser.status == 'active') {
+      changeAccess(blockedUser.id, true)
+    } else {
+      changeAccess(blockedUser.id, false)
+    }
+  }
+ 
   return (
     <Box className={styles.container}>
       <UserToolbar handleFiltersChange={handleFiltersChange} />
@@ -71,7 +93,7 @@ export default function UserTable() {
                   <Chip
                     label={user.status}
                     size="small"
-                    color={user.status === "ACTIVE" ? "success" : "error"}
+                    color={user.status === "active" ? "success" : "error"}
                   />
                 </TableCell>
 
@@ -80,17 +102,22 @@ export default function UserTable() {
                   <IconButton>
                     <EditIcon/>
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={() => setBlockedUser({username: user.username, status: user.status, id: user.id})}>
                     <BlockIcon/>
                   </IconButton>
                 </TableCell>
-                <BlockAlert username={user.username} id={user.id}/>
+                
               </TableRow>
               
             ))}
           </TableBody>
         </Table>
-          <Pagination defaultPage={page ?? 1} onChange={(_, page)=> (setPage(page))} color="primary" count={totalPages}/> 
+            <Pagination page={page ?? 1} onChange={(_, page)=> (setPage(page))} color="primary" count={totalPages}/> 
+
+            <AlertBox open={!!blockedUser} handleClose={handleClose}>
+
+                <BlockAlert onSuccess={HandleAccess} action={blockedUser?.status === 'blocked' ? 'unblock' : 'block'} username={blockedUser?.username ?? 'undefined'} handleClose={handleClose}/>
+            </AlertBox>
       </TableContainer>
       
 

@@ -16,7 +16,7 @@ import {
 } from 'typeorm';
 import { OmitType } from '@nestjs/mapped-types';
 import { UpdateUserDto } from '../users/dto/update-user-dto.js';
-import { rmSync } from 'fs';
+import { rmSync, stat } from 'fs';
 import { GoogleAuthDto } from '../auth/dto/google.dto.js';
 import { CreateUserInput, UserResponse } from './interfaces/user.interface.js';
 import { FindUserDto } from './dto/find-user-dto.js';
@@ -58,6 +58,9 @@ export class UsersService {
       if (query.sortBy === SORT.UPDATEDAT) {
         order.updatedAt =  'ASC';
       }
+    }
+    if (query.status) {
+      where.status = query.status
     }
 
     if (query.orderBy) {

@@ -5,3 +5,7 @@
 .title {
     font-weight: 700 !important;
 }
+
+.container a {
+    color: white;
+}

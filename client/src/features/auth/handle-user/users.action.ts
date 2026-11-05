@@ -5,6 +5,7 @@ import { PaginationRequest, PaginationResponse } from "@/type/meta.type";
 import { AdminUser } from "@/type/user.type";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
+import { ChangeAccess } from "./users.type";
 
 
 type data = {
@@ -32,6 +33,20 @@ export const fetchUsersAsync = createAsyncThunk <PaginationResponse<AdminUser>, 
             const response = await api.get('/users', {
                 params: filters
             })
+            return response.data
+        } catch (error) {
+            enqueueSnackbar(getErrorMessage(error))
+            return thunkApi.rejectWithValue(getErrorMessage(error))
+        }
+    }
+)
+
+
+export const changeAccessAsync = createAsyncThunk <AdminUser, ChangeAccess>(
+    'user/change-access',
+    async({userId, block}, thunkApi) => {
+        try {
+            const response = await api.patch(`users/${userId}/access`, {block})
             return response.data
         } catch (error) {
             enqueueSnackbar(getErrorMessage(error))

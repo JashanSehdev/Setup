@@ -1,21 +1,38 @@
 import { InputAdornment, Stack, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FiltersTray from "./filters-tray/filters-tray";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { FilterInput } from "./user-toolbar.type";
+import { useDebounce } from "@/utils/debounce";
+import { useCallback, useEffect } from "react";
 
 export default function UserToolbar({
   handleFiltersChange,
 }: {
-  handleFiltersChange: (data : FilterInput) => void;
+  handleFiltersChange: (data: FilterInput) => void;
 }) {
-  const { control, handleSubmit, register, reset } = useForm<FilterInput>();
-
   const onSubmit: SubmitHandler<FilterInput> = async (data: FilterInput) => {
     handleFiltersChange(data);
   };
-
+  const { control, handleSubmit, register, reset, getValues } =
+    useForm<FilterInput>({});
   const onApply = handleSubmit(onSubmit);
+  const search = useWatch({
+    control,
+    name: "search",
+  });
+
+  const debouncedSearch = useDebounce(() => {
+    handleFiltersChange({
+      ...getValues(),
+      search,
+    });
+  }, 700);
+
+  useEffect(() => {
+    debouncedSearch();
+  }, [search, debouncedSearch]);
+
   return (
     <form onSubmit={onApply}>
       <Stack
@@ -31,7 +48,6 @@ export default function UserToolbar({
           size="small"
           placeholder="Search..."
           sx={{ flex: 1 }}
-          // onKeyDown={handleSearch}
           slotProps={{
             input: {
               startAdornment: (

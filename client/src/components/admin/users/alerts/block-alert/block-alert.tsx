@@ -1,24 +1,52 @@
 
-import { Button, Paper, Stack, Typography } from '@mui/material'
-import React from 'react'
+import { Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material'
 import BlockIcon from '@mui/icons-material/Block';
 import styles from './block-alert.module.css'
+import WarningIcon from '@mui/icons-material/Warning';
+import { useAppDispatch } from '@/features/store';
 
 
-const BlockAlert = ({username, id} : {username: string, id : number}) => {
+type BlockAlertProp = {
+    onSuccess : () => void
+    username : string
+    action :'block' | 'unblock',
+    handleClose : ()=> void
+}
+const BlockAlert = ({
+    onSuccess,
+    username,
+    action = 'block',
+    handleClose
+} : BlockAlertProp) => {
+    
+  const handleSubmit =() => {
+    onSuccess()
+    handleClose()
+  }
+    
   return (
-    <Paper className={styles.container}>
-        <Typography variant='h5' align='center'>Alert</Typography>
-        <Stack spacing={ 1}>
+    <Card className={styles.container}>
+        <CardHeader 
+            title="Alert"
+            subheader="blockUser"
+            avatar={<WarningIcon/>}
+        />
+        <CardContent>
+            <Stack spacing={2}>
             <Typography align='center'>
-                You are Blocking {username}, Id {id}
+                You are Blocking {username}
             </Typography>
 
-            <Button variant='contained' size='small' startIcon={<BlockIcon/>}>
-                Block
+            <Button variant='contained' size='small' startIcon={<BlockIcon/>} onClick={handleSubmit}>
+                {action}
+            </Button>
+            <Button variant='outlined' size='small' onClick={handleClose}>
+                Cancel
             </Button>
         </Stack>
-    </Paper>
+        </CardContent>
+        
+    </Card>
   )
 }
 

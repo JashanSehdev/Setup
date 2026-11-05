@@ -32,6 +32,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useAppDispatch, useAppSelector } from "@/features/store";
 import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from "next/navigation";
+import { logoutMeAsync } from "@/features/auth/handle-auth/auth.action";
 
 const drawerWidth = 240;
 
@@ -49,6 +50,12 @@ export default function Sidebar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const user = useAppSelector((state) => state.auth.user)
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const logout = () => {
+    dispatch(logoutMeAsync());
+    router.push("/login")
+  }
+
 
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
@@ -99,7 +106,7 @@ export default function Sidebar() {
               />
             </ListItem>
 
-            <Button variant="contained" >
+            <Button variant="contained" onClick={logout} >
               Logout
             </Button>
             </Stack>

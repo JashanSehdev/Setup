@@ -14,7 +14,7 @@ export interface AdminUser {
   username: string;
   email: string;
   role: "ADMIN" | "USER";
-  status: "ACTIVE" | "BLOCKED";
+  status: "active" | "blocked";
   createdAt: string;
   avatar ?: string
 }

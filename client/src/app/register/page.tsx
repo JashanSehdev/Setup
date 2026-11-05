@@ -1,87 +1,45 @@
 "use client";
-import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Box,  Container,  Stack, Typography } from "@mui/material";
 import { InputFields, RegisterInput, registerSchema } from "./register.type";
-import { zodResolver } from "@hookform/resolvers/zod";
 import styles from "./register.module.css";
-import GoogleAuthButton from "@/components/auth/google-auth-button/google-auth";
-import Link from "next/link";
-import useRegister from "@/hooks/useRegister";
+import RegisterCard from "@/components/auth/signup/register-card";
+import PeopleIcon from '@mui/icons-material/People'; 
 
-const inputs: InputFields[] = [
-  {
-    name: "username",
-    type: "text",
-    placeholder: "eg: John Doe",
-    label: "Enter Your Username",
-  },
-  {
-    name: "email",
-    type: "email",
-    placeholder: "eg: john.doe@gmail.com",
-    label: "Enter Your Email",
-  },
-  {
-    name: "password",
-    type: "password",
-    placeholder: "Enter your password",
-    label: "Enter Your Password",
-  },
-  {
-    name: "confirmPassword",
-    type: "password",
-    placeholder: "Confirm Your Password",
-    label: "Confirm Your Password",
-  },
-];
 
 export default function Register() {
 
-  const {loading, registerUser } = useRegister()
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
-  });
-
-  const onSubmit: SubmitHandler<RegisterInput> = async (
-    data: RegisterInput,
-  ) => {
-    await registerUser(data.username, data.email, data.password)
-  };
+  const name : string = 'Splitwise'
   return (
-    <Paper className={styles.Container}>
-      <Stack direction="column" spacing={3}>
-        <Typography variant="h3">Create Your Account</Typography>
+     <Container>
+      <Box className={styles.container}>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack direction="column" spacing={2}>
-            {inputs.map((item) => (
-              <TextField
-                key={item.name}
-                {...register(item.name)}
-                placeholder={item.placeholder}
-                type={item.type}
-                error={!!errors[item.name]}
-                helperText={errors[item.name]?.message}
-              />
-            ))}
-            <Stack direction={"row"} spacing={1}>
-              <Typography variant="body1">Already Have an account?</Typography>
-              <Link href={"login"}>
-                <Typography>Login</Typography>
-              </Link>
+        <Stack className={styles.imageContainer} sx={{display: {
+          xs:'none',
+          md:'flex',
+          
+        }}}>
+            <Stack direction='row' spacing={1}>
+              <PeopleIcon sx={{fontSize:'30px'}} />
+              <Typography variant="h5" sx={{fontWeight:'700'}}>
+                {name}
+              </Typography>
             </Stack>
-            <Button loading={loading} type="submit" variant="contained">
-              Signup
-            </Button>
-          </Stack>
-        </form>
-        <GoogleAuthButton />
-      </Stack>
-    </Paper>
+
+            <Box
+              component='img' 
+              src={"/SecureLogin.png"}
+              height={'auto'}
+              alt={"Login Page image"}
+              width={'auto'}
+              className={styles.image}
+            />
+            
+            
+        </Stack>
+        <Box className={styles.loginCard}>
+          <RegisterCard />
+        </Box>
+      </Box>
+    </Container>
   );
 }

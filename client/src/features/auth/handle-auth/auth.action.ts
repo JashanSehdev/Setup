@@ -5,6 +5,7 @@ import { LoginInput } from "@/app/login/login.type";
 import { RegisterInput } from "@/app/register/register.type";
 import { User } from "@/type/user.type";
 import { GoogleDispatch } from "./auth.type";
+import { enqueueSnackbar } from "notistack";
 
 type Register = Omit<RegisterInput, "confirmPassword">;
 

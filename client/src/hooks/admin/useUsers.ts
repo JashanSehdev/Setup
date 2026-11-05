@@ -1,7 +1,10 @@
 "use client";
 
 import { FilterInput } from "@/components/admin/users/user-toolbar/user-toolbar.type";
-import { fetchUsersAsync } from "@/features/auth/handle-user/users.action";
+import {
+  changeAccessAsync,
+  fetchUsersAsync,
+} from "@/features/auth/handle-user/users.action";
 import { useAppDispatch } from "@/features/store";
 import { AdminUser } from "@/type/user.type";
 import { useEffect, useState } from "react";
@@ -12,15 +15,15 @@ export default function useUsers() {
   const [limit] = useState<number>(5);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalUsers, setTotalUsers] = useState<number>(0);
-   const [filters, setFilters] = useState<FilterInput>({});
+  const [filters, setFilters] = useState<FilterInput>({});
 
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  
- const handleFiltersChange = (data: FilterInput) => {
-  setPage(1);
-  setFilters(data);
-};
+
+  const handleFiltersChange = (data: FilterInput) => {
+    setPage(1);
+    setFilters(data);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -52,6 +55,18 @@ export default function useUsers() {
     };
   }, [dispatch, limit, page, filters]);
 
+  const changeAccess = async (userId: number, action: boolean) => {
+    const result = await dispatch(
+      changeAccessAsync({ userId, block: action }),
+    ).unwrap();
+
+    setUsers((prev) =>
+      prev.map((item) => {
+        return item.id === result.id ? result : item;
+      }),
+    );
+  };
+
   return {
     users,
     loading,
@@ -59,6 +74,7 @@ export default function useUsers() {
     setPage,
     limit,
     totalPages,
-    handleFiltersChange
+    handleFiltersChange,
+    changeAccess,
   };
 }

@@ -54,6 +54,17 @@ const RoleOptions = [
   }
 ]
 
+const StatusOptions = [
+  {
+    label : 'Active',
+    value : 'active'
+  },
+  {
+    label : 'Block',
+    value : 'blocked'
+  }
+]
+
 
 
 export default function FiltersTray({ control, reset, onApply }: FilterTrayProp) {
@@ -126,6 +137,14 @@ export default function FiltersTray({ control, reset, onApply }: FilterTrayProp)
               control={control}
               options={RoleOptions} 
               label="Role"
+              size="small"
+            />
+
+            <SelectController
+              name="status"
+              control={control}
+              options={StatusOptions} 
+              label="Status"
               size="small"
             />
 

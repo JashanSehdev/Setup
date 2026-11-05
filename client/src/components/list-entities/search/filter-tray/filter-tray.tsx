@@ -92,6 +92,18 @@ export default function Filters() {
               <MenuItem value="admin">Admin</MenuItem>
               <MenuItem value="user">User</MenuItem>
             </TextField>
+{/* 
+            <TextField
+              select
+              label="Status"
+              defaultValue="all"
+              size="small"
+              fullWidth
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="blocked">Blocked</MenuItem>
+            </TextField> */}
+
           </Stack>
 
           <Divider />

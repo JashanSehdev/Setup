@@ -56,7 +56,7 @@ export default function EntityTable() {
                   label={user.status}
                   size="small"
                   color={
-                    user.status === "ACTIVE"
+                    user.status === "active"
                       ? "success"
                       : "error"
                   }
