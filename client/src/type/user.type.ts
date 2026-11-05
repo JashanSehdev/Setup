@@ -1,3 +1,4 @@
+import { RoleEnum, StatusEnum } from "@/enum/user.enum";
 
 export type User = {
     id : string;
@@ -13,8 +14,8 @@ export interface AdminUser {
   id: number;
   username: string;
   email: string;
-  role: "ADMIN" | "USER";
-  status: "active" | "blocked";
+  role: RoleEnum;
+  status: StatusEnum;
   createdAt: string;
   avatar ?: string
 }

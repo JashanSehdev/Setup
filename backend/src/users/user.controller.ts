@@ -7,6 +7,7 @@ import { FilterUserDto } from "./dto/filter-user-dto.js";
 import { Status } from "./enum/status.enum.js";
 import { Roles } from "../auth/decorator/roles.decorator.js";
 import { RoleGuard } from "../auth/guard/auth.guard.js";
+import { UpdateUserDto } from "./dto/update-user-dto.js";
 
 @Controller('users')
 @UseGuards(RoleGuard)
@@ -33,5 +34,10 @@ export class UserControllers {
     @Patch("/:userId/avatar")
     changeAvatar(@Param("userId", ParseIntPipe) userId : number, @Body() changeAvatarDto : ChangeAvatarDto) {
         return this.userService.changeAvatar(userId, changeAvatarDto.avatar)
+    }
+
+    @Patch("/:userId")
+    editUser (@Param("userId", ParseIntPipe) userId : number, @Body() updateUserDto : UpdateUserDto){
+        return this.userService.update(userId, updateUserDto);
     }
 }

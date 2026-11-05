@@ -1,8 +1,10 @@
 "use client";
 
+import { EditUserInput } from "@/components/admin/users/edit-user/edit-user-form/edit-user-form.type";
 import { FilterInput } from "@/components/admin/users/user-toolbar/user-toolbar.type";
 import {
   changeAccessAsync,
+  EditUserByAdminAsync,
   fetchUsersAsync,
 } from "@/features/auth/handle-user/users.action";
 import { useAppDispatch } from "@/features/store";
@@ -67,6 +69,18 @@ export default function useUsers() {
     );
   };
 
+  const editUserbyAdmin = async (userId: number, editUser : EditUserInput) => {
+    const result = await dispatch(
+      EditUserByAdminAsync({ userId, ...editUser}),
+    ).unwrap(); 
+
+    setUsers((prev) =>
+      prev.map((item) => {
+        return item.id === result.id ? result : item;
+      }),
+    );
+  }
+
   return {
     users,
     loading,
@@ -76,5 +90,6 @@ export default function useUsers() {
     totalPages,
     handleFiltersChange,
     changeAccess,
+    editUserbyAdmin
   };
 }

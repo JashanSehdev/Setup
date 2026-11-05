@@ -5,7 +5,8 @@ import { PaginationRequest, PaginationResponse } from "@/type/meta.type";
 import { AdminUser } from "@/type/user.type";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
-import { ChangeAccess } from "./users.type";
+import { ChangeAccess, EditUserByAdmin } from "./users.type";
+import { EditUserInput } from "@/components/admin/users/edit-user/edit-user-form/edit-user-form.type";
 
 
 type data = {
@@ -47,6 +48,20 @@ export const changeAccessAsync = createAsyncThunk <AdminUser, ChangeAccess>(
     async({userId, block}, thunkApi) => {
         try {
             const response = await api.patch(`users/${userId}/access`, {block})
+            return response.data
+        } catch (error) {
+            enqueueSnackbar(getErrorMessage(error))
+            return thunkApi.rejectWithValue(getErrorMessage(error))
+        }
+    }
+)
+
+export const EditUserByAdminAsync = createAsyncThunk <AdminUser, EditUserByAdmin >(
+    'user/edit-user',
+    async(data, thunkApi) => {
+        try {
+            const {userId, ...userData} = data
+            const response = await api.patch(`users/${userId}`, userData)
             return response.data
         } catch (error) {
             enqueueSnackbar(getErrorMessage(error))

@@ -25,20 +25,26 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from "react";
 import BlockAlert from "../alerts/block-alert/block-alert";
 import AlertBox from "../../alert/alertBox";
-import { BlockUser } from "./user-table";
+import { BlockUser, EditUserType } from "./user-table";
+import EditUser from "../edit-user/edit-user";
+import { AdminUser } from "@/type/user.type";
+
 
 
 
 export default function UserTable() {
-  const {users, totalPages, page, setPage, handleFiltersChange, changeAccess} = useUsers()
+  const {users, totalPages, page, setPage, handleFiltersChange, changeAccess, editUserbyAdmin} = useUsers()
   const [blockedUser, setBlockedUser] = useState<BlockUser | null>();
-
+  const [editUser, setEditUser] = useState< AdminUser | null> (null)
   const handleOpen = (id : number, username: string, status : 'active' | 'blocked') => {
     setBlockedUser({username, status, id})
   }
 
   const handleClose = () => {
     setBlockedUser(null)
+  }
+  const handleEditClose = () => {
+    setEditUser(null)
   }
 
   const HandleAccess = () => {
@@ -99,7 +105,7 @@ export default function UserTable() {
 
                 <TableCell>{user.createdAt.slice(0,10)}</TableCell>
                 <TableCell align="center">
-                  <IconButton>
+                  <IconButton onClick={() => setEditUser(user)}>
                     <EditIcon/>
                   </IconButton>
                   <IconButton onClick={() => setBlockedUser({username: user.username, status: user.status, id: user.id})}>
@@ -118,6 +124,7 @@ export default function UserTable() {
 
                 <BlockAlert onSuccess={HandleAccess} action={blockedUser?.status === 'blocked' ? 'unblock' : 'block'} username={blockedUser?.username ?? 'undefined'} handleClose={handleClose}/>
             </AlertBox>
+            <EditUser editUserbyAdmin={editUserbyAdmin} user={editUser} open={!!editUser} handleClose={handleEditClose}/>
       </TableContainer>
       
 
