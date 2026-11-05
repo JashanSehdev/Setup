@@ -6,6 +6,7 @@ import { RegisterInput } from "@/app/register/register.type";
 import { User } from "@/type/user.type";
 import { GoogleDispatch } from "./auth.type";
 import { enqueueSnackbar } from "notistack";
+import { RootState } from "@/features/store";
 
 type Register = Omit<RegisterInput, "confirmPassword">;
 
@@ -62,7 +63,6 @@ export const logoutMeAsync = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       await api.get("/auth/logout");
-      redirect("/");
     } catch (error: unknown) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
     }

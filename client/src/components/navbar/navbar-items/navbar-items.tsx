@@ -26,20 +26,16 @@ const navItems = [
 ];
 export default function NavbarItems() {
   return (
-    <Stack >
-      <List >
+    <Stack className={styles.container} direction={'row'}>
+
         {navItems.map((item) => (
           <Link key={item.label} href={item.href} className={styles.link}>
             <ListItem
             >
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText>{item.label}</ListItemText>
+              <ListItemText secondary={item.label} />
             </ListItem>
           </Link>
         ))}
-      </List>
     </Stack>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 import { Box,  Container,  Stack, Typography } from "@mui/material";
-import { InputFields, RegisterInput, registerSchema } from "./register.type";
 import styles from "./register.module.css";
 import RegisterCard from "@/components/auth/signup/register-card";
 import PeopleIcon from '@mui/icons-material/People'; 

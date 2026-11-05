@@ -49,7 +49,7 @@ export default function LoginForm() {
           <ControlField
             key={item.name}
             name={item.name}
-            label={item.name}
+            label={item.label}
             type={item.type as "text" | "password"}
             control={control}
             placeholder={item.placeholder}
