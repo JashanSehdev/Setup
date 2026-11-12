@@ -9,16 +9,20 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== "undefined") {
-        window.cookieStore.delete('access_token');
-        window.location.href = "/login";
-      }
-       const { store } = await import('@/features/store');
+    const isUnauthorized = error.response?.status === 401;
+    const isLogoutRequest = error.config?.url?.includes("/auth/logout");
+    if (isUnauthorized && !isLogoutRequest) {
+      const { store } = await import("@/features/store");
       store.dispatch(logoutMeAsync());
+      
+      if (window !== undefined) {
+        window.dispatchEvent(
+          new Event ('auth:navigator')
+        )
+      }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export const getErrorMessage = (error: unknown): string => {
