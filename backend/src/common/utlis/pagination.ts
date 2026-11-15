@@ -1,11 +1,11 @@
-import { PaginationResponse } from "../interfaces/pagination-response.interface.js";
+import { PaginationResult } from "../interfaces/pagination.interface.js";
 
 export function paginationResponse<T>(
     data : T[],
     page : number,
     limit : number,
     total : number
-  ) : PaginationResponse<T>{
+  ) : PaginationResult<T>{
     return {
       success : true,
       data : data,
