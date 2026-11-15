@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Socket } from 'socket.io';
-import parse from 'cookie';
+import {parseCookie} from 'cookie';
 
 interface JwtPayload {
   sub: number;
@@ -20,7 +20,7 @@ export class WebsocketAuthMiddleware {
         return next(new NotFoundException('Authentication cookie not found'));
       }
 
-      const cookies = parse(cookieHeader);
+      const cookies = parseCookie(cookieHeader);
 
       const token = cookies['access_token'];
 

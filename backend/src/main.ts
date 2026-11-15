@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import cookieParser from 'cookie-parser'
 import { ValidationPipe } from '@nestjs/common';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
