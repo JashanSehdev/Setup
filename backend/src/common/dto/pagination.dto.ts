@@ -1,11 +1,17 @@
-import { IsNumberString, IsOptional } from "class-validator";
+import { IsInt, IsNumberString, IsOptional, Min } from "class-validator";
+import { Type } from 'class-transformer' 
 
 export class PaginationDto {
+
       @IsOptional()
-      @IsNumberString()
-      page?: string;
+      @Type(() => Number)
+      @IsInt()
+      @Min(1)
+      page = 1
     
       @IsOptional()
-      @IsNumberString()
-      limit?: string;
+      @Type(() => Number)
+      @IsInt()
+      @Min(1)
+      limit = 10
 }
