@@ -24,17 +24,16 @@ import { paginationResponse } from '../common/utlis/pagination.js';
 import { FilterUserDto } from './dto/filter-user-dto.js';
 import { ORDER, SORT } from '../common/enum/filter.enum.js';
 import { Role } from './enum/roles.enum.js';
+import { BaseService } from '../common/service/base.service.js';
+import { successResponse } from '../common/utlis/response.js';
 
 Injectable();
-export class UsersService {
+export class UsersService extends BaseService <User>{
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
-
-  async create(createUser: CreateUserInput): Promise<UserResponse> {
-    const user = this.userRepository.create(createUser);
-    return await this.userRepository.save(user);
+    private readonly userRepository: Repository<User>
+  ) {
+    super(userRepository);
   }
 
   async findUsers(userId: number, query: FilterUserDto) {
@@ -127,7 +126,7 @@ export class UsersService {
 
     return rest;
   }
-
+  
   async findOneByEmail(email: string): Promise<UserResponse | null> {
     return await this.userRepository.findOneBy({ email });
   }
@@ -136,49 +135,19 @@ export class UsersService {
     return await this.userRepository.findOneBy({ username });
   }
 
-  async findAll(id: number): Promise<UserResponse[] | null> {
-    return await this.userRepository.find();
-  }
 
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UserResponse> {
-    const user = await this.findOne(id);
-    if (!user)
-      throw new NotFoundException({
-        code: 'NOT_FOUND',
-        message: 'User not found',
-      });
-
-    const updatedUser = { ...user, ...updateUserDto };
-    await this.userRepository.update(id, updatedUser);
-    return updatedUser;
-  }
-
-  async delete(id: number): Promise<UserResponse> {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user)
-      throw new NotFoundException({
-        code: 'NOT_FOUND',
-        message: 'User not found',
-      });
-    return this.userRepository.remove(user);
-  }
 
   async changeAvatar(userId: number, avatar: string) {
     const user = this.findOne(userId);
 
     if (!user) throw new NotFoundException('User not found');
 
-    const update = await this.userRepository.update(userId, { avatar });
+    const update = await this.update(userId, {avatar});
 
-    if (update.affected !== 1)
-      throw new InternalServerErrorException('Failed to update User Avatar');
+    if(!update) throw new InternalServerErrorException('Unable to change avatar');
 
-    return {
-      success: true,
-      data: { avatar },
-    };
+    return successResponse('Avatar change Successfully', {avatar});
+
+    
   }
 }
