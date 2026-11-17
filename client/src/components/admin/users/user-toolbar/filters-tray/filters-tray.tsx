@@ -28,7 +28,7 @@ const sortByOptions = [
   },
   {
     label: "name",
-    value: "name",
+    value: "username",
   },
 ];
 

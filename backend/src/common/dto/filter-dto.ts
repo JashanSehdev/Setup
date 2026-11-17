@@ -13,8 +13,8 @@ export class FilterDto extends PaginationDto{
     orderBy : ORDER
 
     @IsOptional()
-    @IsEnum(SORT)
-    sortBy : SORT
+    @IsString()
+    sortBy : string
 
 
 }

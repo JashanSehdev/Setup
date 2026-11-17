@@ -1,7 +1,7 @@
 
 export enum SORT {
     CREATEDAT = 'createdAt',
-    NAME = 'name',
+    NAME = 'username',
     UPDATEDAT = 'updatedAt'
 }
 

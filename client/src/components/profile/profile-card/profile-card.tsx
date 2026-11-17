@@ -1,7 +1,6 @@
 "use client";
-import { Avatar, Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
 import styles from "./profile-card.module.css";
-import EditIcon from "@mui/icons-material/Edit";
 import MailIcon from "@mui/icons-material/Mail";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import CloudinaryUploadController from "@/components/form/upload-widget/upload-widget";

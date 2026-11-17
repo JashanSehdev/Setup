@@ -1,7 +1,6 @@
-import { Box, Card, Container, Stack, Typography } from '@mui/material'
+import { Container, Stack, Typography } from '@mui/material'
 import styles from './profile.module.css'
 import ProfileCard from '../../../components/profile/profile-card/profile-card'
-import EditProfileCard from '@/components/profile/edit-profile/edit-profile'
 
 
 export default function ProfilePage(){

@@ -21,6 +21,7 @@ import { SORT } from '../common/enum/filter.enum.js';
 import { BaseService } from '../common/service/base.service.js';
 import { successResponse } from '../common/utlis/response.js';
 import { BaseUser, Me } from './interfaces/user.interface.js';
+import { applyFilters } from '../common/utlis/filter.js';
 
 Injectable();
 export class UsersService extends BaseService<User> {
@@ -35,42 +36,31 @@ export class UsersService extends BaseService<User> {
     const page = Number(query.page ?? 1);
     const limit = Number(query.limit ?? 10);
 
-    const where: FindOptionsWhere<User> = {};
-    const order: FindOptionsOrder<User> = {};
-
-    where.id = Not(userId);
-
-    if (query.sortBy) {
-      if (query.sortBy === SORT.NAME) {
-        order.username = 'ASC';
-      }
-    } else if (query.sortBy) {
-      if (query.sortBy === SORT.CREATEDAT) {
-        order.createdAt = 'ASC';
-      }
-    } else if (query.sortBy) {
-      if (query.sortBy === SORT.UPDATEDAT) {
-        order.updatedAt = 'ASC';
-      }
-    }
+    const baseWhere : FindOptionsWhere<User> = {
+      id : Not(userId)
+    } 
+    
+    
     if (query.status) {
-      where.status = query.status;
-    }
-
-    if (query.orderBy) {
-      order.createdAt = query.orderBy;
-    }
-
-    if (query.search) {
-      where.username = ILike(`%${query.search}%`);
+      baseWhere.status = query.status;
     }
 
     if (query.role) {
-      where.role = query.role;
+      baseWhere.role = query.role;
     }
 
+    const [where, order] = applyFilters(
+      query,
+      {
+        where : baseWhere
+      },
+      {
+        searchOn : ['username'],
+        sortOn : ['username']
+      }
+    )
     const [data, total] = await this.userRepository.findAndCount({
-      where,
+      where ,
       select: {
         id: true,
         username: true,
