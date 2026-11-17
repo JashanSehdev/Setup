@@ -1,13 +1,13 @@
 import { Controller, Get, Req, Query, Patch, ParseIntPipe, Body, Param, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { UsersService } from "./user.service.js";
-import { FindUserDto } from "./dto/find-user-dto.js";
 import { ChangeAvatarDto } from "./dto/change-avatar.dto.js";
 import { FilterUserDto } from "./dto/filter-user-dto.js";
 import { Status } from "./enum/status.enum.js";
 import { Roles } from "../auth/decorator/roles.decorator.js";
 import { RoleGuard } from "../auth/guard/auth.guard.js";
 import { UpdateUserDto } from "./dto/update-user-dto.js";
+import { CurrentUser } from "../common/decorators/current-user.decorator.js";
 
 @Controller('users')
 @UseGuards(RoleGuard)
@@ -18,8 +18,8 @@ export class UserControllers {
     ){}
 
     @Get()
-    getUsers(@Req() req : Request & {user : any}, @Query() query : FilterUserDto) {
-        return this.userService.findUsers(req.user.id, query )
+    getUsers(@CurrentUser('id') userId : number, @Query() query : FilterUserDto) {
+        return this.userService.findUsers(userId, query )
     }
 
     @Roles(['admin'])

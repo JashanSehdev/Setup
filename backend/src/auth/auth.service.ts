@@ -3,7 +3,6 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/user.service.js';
 import { RegisterUserDto } from './dto/register.dto.js';
@@ -11,9 +10,10 @@ import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login.dto.js';
 import { GoogleAuthDto } from './dto/google.dto.js';
-import { UserResponse } from '../users/interfaces/user.interface.js';
 import { User } from '../users/entities/users.entity.js';
 import { Status } from '../users/enum/status.enum.js';
+import { AuthenticatedUser } from '../common/interfaces/authenticated-user.interface.js';
+import { Me } from '../users/interfaces/user.interface.js';
 
 @Injectable()
 export class AuthService {
@@ -27,15 +27,12 @@ export class AuthService {
       registerUserDto.email,
     );
 
-    if(!existingUser) existingUser = await this.usersService.findOneSensitiveByUsername(
+    if(!existingUser) existingUser = await this.usersService.findOneByUsername(
       registerUserDto.username
     )
     
     if (existingUser)
-      throw new ConflictException({
-        code: 'ALREADY_EXIST',
-        message: 'user already exist',
-      });
+      throw new ConflictException('User already exist')
 
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
 
@@ -44,7 +41,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const payload = {
+    const payload : AuthenticatedUser = {
       id: user.id,
       username: user.username,
       email: user.email,
@@ -60,16 +57,13 @@ export class AuthService {
     const {identifier} = loginUserDto
     let user : User | null = null;
     if (identifier.includes('@')){
-      user = await this.usersService.findOneSensitiveByEmail(identifier)
+      user = await this.usersService.findOneByEmail(identifier)
     } else {
-      user = await this.usersService.findOneSensitiveByUsername(identifier)
+      user = await this.usersService.findOneByUsername(identifier)
     }
 
     if (!user) {
-      throw new NotFoundException({
-        code: 'NOT_FOUND_EXCEPTION',
-        message: 'user not found',
-      });
+      throw new NotFoundException('user not found')
     }
 
     if(user.status === Status.BLOCK) {
@@ -80,7 +74,7 @@ export class AuthService {
       user.password,
     );
 
-    if(!isAuthenticated) throw new UnauthorizedException({code : 'UNAUTHORIZE', message : 'email or password is Incorrect'});
+    if(!isAuthenticated) throw new BadRequestException('username or password is incorrect');
 
     const payload = {id : user.id, email:user.email, username : user.username, role : user.role}
 
@@ -100,12 +94,12 @@ export class AuthService {
 
      payload = { id : user.id, email : user.email, username : user.username, role : user.role}
 
-     return await this.jwtService.sign(payload)
+     return  this.jwtService.sign(payload)
   }
 
-  async getMe(id : number) : Promise<UserResponse | null> {
-    const result =  await this.usersService.findOne(id);
+  async getMe(id : number) : Promise<Me> {
+    const result =  await this.usersService.getMe(id);
     
-    return result as UserResponse
+    return result as Me
   }
 }
