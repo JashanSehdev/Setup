@@ -12,7 +12,7 @@ export default function ProfilePage(){
                 <Typography variant='body1' color={"textSecondary"}>Manage Your Personal Information and Account Settings</Typography>
             </Stack>
             <ProfileCard/>
-            <EditProfileCard/>
+
         </Container>
     )
 }

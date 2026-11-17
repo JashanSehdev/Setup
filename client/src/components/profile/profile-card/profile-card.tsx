@@ -8,6 +8,7 @@ import CloudinaryUploadController from "@/components/form/upload-widget/upload-w
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/features/store";
 import { changeAvatarAsync } from "@/features/auth/handle-user/users.action";
+import EditProfileCard from "../edit-profile/edit-profile";
 
 interface avatarInput {
   avatar: string;
@@ -29,7 +30,7 @@ export default function ProfileCard() {
         <Stack direction="row" spacing={1.5}>
           <Box className={styles.editBox}>
             <Avatar src={user?.avatar || ""} className={styles.avatar}>
-              JS
+              {user?.username.charAt(0)}
             </Avatar>
 
             <Avatar className={styles.editAvatar}>
@@ -51,24 +52,19 @@ export default function ProfileCard() {
                 variant="body1"
                 sx={{ fontWeight: "700", fontSize: "20px" }}
               >
-                Jashan Sehdev
+                {user?.username ?? 'unkown'}
               </Typography>
-              <Typography variant="caption">@jashanSehdev</Typography>
+              <Typography variant="caption">@{user?.username ?? ""}</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1}>
               <MailIcon />
-              <Typography>jashan@gmail.com</Typography>
+              <Typography>{user?.email ?? 'nil'} </Typography>
             </Stack>
           </Stack>
         </Stack>
         <Box>
-          <Button variant="outlined" color="secondary">
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <EditIcon fontSize="small" />
-              <Typography>Edit</Typography>
-            </Stack>
-          </Button>
+          <EditProfileCard/>
         </Box>
       </Stack>
     </Paper>
