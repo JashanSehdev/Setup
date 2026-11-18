@@ -1,5 +1,4 @@
-
-FROM node:24-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -9,9 +8,8 @@ RUN npm ci
 
 COPY . .
 
-ENV HOSTNAME=0.0.0.0
-ENV WATCHPACK_POLLING=true
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

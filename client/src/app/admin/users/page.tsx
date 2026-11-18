@@ -2,6 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import styles from './users.module.css'
 import UserTable from "@/components/admin/users/user-table/user-table";
 
+
 export default function Users() {
   return (
     <Container sx={{ pt: "2rem" }}>

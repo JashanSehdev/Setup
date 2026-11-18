@@ -25,7 +25,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from "react";
 import BlockAlert from "../alerts/block-alert/block-alert";
 import AlertBox from "../../alert/alertBox";
-import { BlockUser, EditUserType } from "./user-table";
+import { BlockUser } from "./user-table.type";
 import EditUser from "../edit-user/edit-user";
 import { AdminUser } from "@/type/user.type";
 
@@ -36,9 +36,7 @@ export default function UserTable() {
   const {users, totalPages, page, setPage, handleFiltersChange, changeAccess, editUserbyAdmin} = useUsers()
   const [blockedUser, setBlockedUser] = useState<BlockUser | null>();
   const [editUser, setEditUser] = useState< AdminUser | null> (null)
-  const handleOpen = (id : number, username: string, status : 'active' | 'blocked') => {
-    setBlockedUser({username, status, id})
-  }
+
 
   const handleClose = () => {
     setBlockedUser(null)

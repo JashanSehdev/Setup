@@ -94,17 +94,17 @@ export const shadcnDarkTheme = createTheme({
             outlineOffset: 2,
           },
         },
-        containedPrimary: {
-          "&:hover": { backgroundColor: alpha(tokens.primary, 0.9) },
-        },
-        containedSecondary: {
-          "&:hover": { backgroundColor: alpha(tokens.secondary, 0.8) },
-        },
-        containedError: {
-          backgroundColor: "#7f1d1d",
-          color: tokens.foreground,
-          "&:hover": { backgroundColor: alpha("#7f1d1d", 0.9) },
-        },
+        // containedPrimary: {
+        //   "&:hover": { backgroundColor: alpha(tokens.primary, 0.9) },
+        // },
+        // containedSecondary: {
+        //   "&:hover": { backgroundColor: alpha(tokens.secondary, 0.8) },
+        // },
+        // containedError: {
+        //   backgroundColor: "#7f1d1d",
+        //   color: tokens.foreground,
+        //   "&:hover": { backgroundColor: alpha("#7f1d1d", 0.9) },
+        // },
         outlined: {
           borderColor: tokens.border,
           color: tokens.foreground,
