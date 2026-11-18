@@ -1,15 +1,57 @@
 import { FilterDto } from '../dto/filter-dto.js';
 import { FindOptionsOrder, FindOptionsWhere, ILike } from 'typeorm';
 
+type NestedKeyOf<T> = (keyof T & string) | `${string}.${string}`; 
+
 interface ApplyFilters<T> {
   where?: FindOptionsWhere<T> | FindOptionsWhere<T>[];
   order?: FindOptionsOrder<T>;
 }
 
 interface ApplyOnFilters<T> {
-  searchOn?: (keyof T)[];
-  sortOn?: (keyof T)[];
+  searchOn?: NestedKeyOf<T>[];
+  sortOn?: NestedKeyOf<T>[];
   defaultOrder?: 'asc' | 'desc';
+}
+
+
+function buildNestedObject(path : string, value : unknown) : Record<string, unknown> {
+  const keys = path.split(".");
+  const result : Record<string, unknown> = {}
+
+  let current = result;
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+
+    if (i === keys.length - 1) {
+      current[key] = value;
+    } else {
+      current[key] = {}
+      current = current[key] as Record<string, unknown>
+    }
+  }
+
+  return result
+}
+
+function deepMerge (target : Record<string, any>, source: Record<string, any>) : Record<string, any> {
+
+  for (const key of  Object.keys(source)){
+
+    if (
+      source[key] && 
+      typeof source[key] === 'object' &&
+      !Array.isArray(source[key]) && 
+      !(`_type` in source[key])
+    ) {
+      target[key] = deepMerge({ ...(target[key] || {}) }, source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+
+  return target
 }
 
 export function applyFilters<T>(
@@ -22,23 +64,28 @@ export function applyFilters<T>(
 
  const baseWhere = (Array.isArray(options.where) ? options.where[0] : options.where) || {};
   let where: FindOptionsWhere<T> | FindOptionsWhere<T>[] = { ...baseWhere };
-  const order: FindOptionsOrder<T> = { ...options.order };
+  let order: FindOptionsOrder<T> = { ...options.order };
   if (search && searchOn && searchOn.length > 0) {
-    where = searchOn.map((field) => ({
+    where = searchOn.map((field) => {
+      const nestedCondition = buildNestedObject(field, ILike(`%${search}%`))
+      return deepMerge({
       ...baseWhere,
-      [field]: ILike(`${search}%`),
-    }));
+    }, nestedCondition) as FindOptionsWhere<T>
+  
+  });
   }
 
-  if (sortBy && sortOn && sortOn.includes(sortBy as keyof T)) {
-    const direction = (orderBy?.toUpperCase() === 'DESC' ? 'DESC': 'ASC') as 'ASC' | 'DESC';
-    (order as Record<string, 'ASC' | "DESC" >)[sortBy] = direction
+  const normalizedOrder = (orderBy?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC') as 'ASC' | 'DESC';
+  if (sortBy && sortOn && sortOn.includes(sortBy as NestedKeyOf<T>)) {
+    const nestedOrder = buildNestedObject(sortBy, normalizedOrder);
+    order = deepMerge(order as Record<string, any>, nestedOrder) as FindOptionsOrder<T>;
   }
 
   else if (sortOn && sortOn.length > 0 && Object.keys(order).length === 0) {
 
     const fallbackDirection = defaultOrder.toUpperCase() as 'ASC' | 'DESC';
-    (order as Record<string, 'ASC' | 'DESC'>)[sortOn[0] as string] = fallbackDirection;
+    const nestedFallback = buildNestedObject(sortOn[0], fallbackDirection);
+    order = deepMerge(order as Record<string, any>, nestedFallback) as FindOptionsOrder<T>;
   }
 
 
